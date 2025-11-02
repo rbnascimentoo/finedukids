@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+/* Tokens e tema (pais/criança) */
+:root { --radius: 12px; }
+:root, body[data-role="parent"] {
+  --bg: #F7F8FA; --card: #FFFFFF; --text: #0F172A; --muted: #64748B;
+  --primary: #2563EB; --primary-text: #FFFFFF; --border: #E2E8F0;
+}
+body[data-role="child"] {
+  --bg: #EAF2FF; --card: #FFFFFF; --text: #0B2447; --muted: #3E5E9A;
+  --primary: #1D4ED8; --primary-text: #FFFFFF; --border: #C7D2FE;
+}
+html, body, #root { height: 100%; }
+
+body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; background: var(--bg); color: var(--text); }
+
+.page { max-width: 420px; margin: 0 auto; }
+.shadow-card { box-shadow: 0 4px 14px rgba(0,0,0,.06); }
+.shadow-nav  { box-shadow: 0 -6px 18px rgba(0,0,0,.06); }
+
+.card { @apply bg-white border border-gray-100 rounded-2xl p-4; }
+.input { @apply w-full rounded-xl border border-gray-200 p-3 text-base bg-white; }
+.btn { @apply inline-flex items-center justify-center rounded-xl px-4 py-3 font-semibold border transition;
+  background: var(--primary); color: var(--primary-text); border-color: var(--border); }
+.btn.secondary { @apply bg-white text-gray-800; }
+
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }

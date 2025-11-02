@@ -1,0 +1,40 @@
+<svg width="960" height="480" viewBox="0 0 960 480" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#E9F2FF"/>
+      <stop offset="100%" stop-color="#F5FAFF"/>
+    </linearGradient>
+  </defs>
+  <rect width="960" height="480" fill="url(#g1)"/>
+  <g opacity="0.2">
+    <circle cx="120" cy="90" r="60" fill="#BFD9FF"/>
+    <circle cx="260" cy="130" r="40" fill="#D7E7FF"/>
+    <circle cx="860" cy="60" r="70" fill="#D7E7FF"/>
+  </g>
+
+  <!-- Cofrinho -->
+  <g transform="translate(420,180)">
+    <rect x="-120" y="40" rx="24" width="240" height="120" fill="#2F6FE4"/>
+    <rect x="-80" y="20" rx="14" width="160" height="40" fill="#195AD8"/>
+    <rect x="-20" y="10" rx="4" width="40" height="10" fill="#123F99"/>
+    <circle cx="-70" cy="120" r="14" fill="#0F3A8F"/>
+    <circle cx="70" cy="120" r="14" fill="#0F3A8F"/>
+  </g>
+
+  <!-- Moedas -->
+  <g transform="translate(300,280)">
+    <circle cx="0" cy="0" r="22" fill="#FFC94D" stroke="#E0A800" stroke-width="4"/>
+    <text x="-7" y="7" font-family="Arial" font-size="20" fill="#8A6400">R$</text>
+  </g>
+  <g transform="translate(660,300)">
+    <circle cx="0" cy="0" r="22" fill="#FFC94D" stroke="#E0A800" stroke-width="4"/>
+    <text x="-7" y="7" font-family="Arial" font-size="20" fill="#8A6400">R$</text>
+  </g>
+
+  <text x="60" y="430" fill="#2A3A4B" font-size="28" font-family="Inter, Arial, sans-serif" font-weight="700">
+    Economizando para o Futuro
+  </text>
+  <text x="60" y="458" fill="#5B6B7C" font-size="18" font-family="Inter, Arial, sans-serif">
+    Guardar um pouco sempre ajuda a alcançar metas!
+  </text>
+</svg>
