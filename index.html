@@ -60,20 +60,6 @@
   </head>
 
   <body>
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/service-worker.js').then(
-            (registration) => {
-              console.log('ServiceWorker registrado com sucesso:', registration.scope);
-            },
-            (err) => {
-              console.log('Falha ao registrar o ServiceWorker:', err);
-            }
-          );
-        });
-      }
-    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
