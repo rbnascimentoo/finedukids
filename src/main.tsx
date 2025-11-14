@@ -7,6 +7,7 @@ import { registerSW } from "./registerSW";
 import { runWeeklyAutoAllowance } from "./services/autoAllowance";
 import { processQueue, installOnlineSync } from "./services/sync";
 import { supabase } from "./services/supabase";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 function Bootstrapper() {
   useEffect(() => {
@@ -34,9 +35,13 @@ function Bootstrapper() {
 
 registerSW();
 
+const queryClient = new QueryClient();
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <BrowserRouter>
     <Bootstrapper />
-    <App />
+    <QueryClientProvider client={queryClient}>
+      <App />
+    </QueryClientProvider>
   </BrowserRouter>,
 );

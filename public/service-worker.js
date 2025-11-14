@@ -4,7 +4,7 @@ const RUNTIME_CACHE = `runtime-${SW_VERSION}`;
 
 const PRECACHE = [
   '/',
-  '/manifest.webmanifest',
+  '/manifest.json',
   '/icons/icon-192x192.png',
   '/icons/icon-512x512.png',
   // '/icons/maskable-192.png',

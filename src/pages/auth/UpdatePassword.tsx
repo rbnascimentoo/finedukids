@@ -1,4 +1,3 @@
-// src/pages/auth/UpdatePassword.tsx
 import { useEffect, useState } from "react";
 import { supabase } from "../../services/supabase";
 import { useNavigate } from "react-router-dom";
@@ -23,6 +22,12 @@ export default function UpdatePassword() {
   const [confirm, setConfirm] = useState("");
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    // segue o padrão das outras telas (tema "parent")
+    document.body.setAttribute("data-role", "parent");
+    return () => document.body.removeAttribute("data-role");
+  }, []);
+
   async function tryEstablishSessionFromUrl() {
     setMsg("Validando seu link…");
     setErr(null);
@@ -34,7 +39,9 @@ export default function UpdatePassword() {
 
       // 1) Fluxo novo: ?code=... -> exchangeCodeForSession
       if (code) {
-        const { error } = await supabase.auth.exchangeCodeForSession(window.location.href);
+        const { error } = await supabase.auth.exchangeCodeForSession(
+          window.location.href,
+        );
         if (error) {
           setErr(error.message || "Link inválido ou expirado.");
           setMsg(null);
@@ -48,18 +55,29 @@ export default function UpdatePassword() {
       // 2) Fluxo antigo: #access_token=...&refresh_token=...&type=recovery -> setSession
       if (!code && hasHash) {
         const params = parseHashTokens(window.location.hash);
-        if (params["type"] === "recovery" && params["access_token"] && params["refresh_token"]) {
+        if (
+          params["type"] === "recovery" &&
+          params["access_token"] &&
+          params["refresh_token"]
+        ) {
           const { data, error } = await supabase.auth.setSession({
             access_token: params["access_token"],
             refresh_token: params["refresh_token"],
           });
           if (error || !data?.session) {
-            setErr(error?.message || "Não foi possível validar o link de recuperação.");
+            setErr(
+              error?.message ||
+                "Não foi possível validar o link de recuperação.",
+            );
             setMsg(null);
             return;
           }
           // limpa o hash para não confundir futuras navegações
-          history.replaceState(null, document.title, window.location.pathname + window.location.search);
+          history.replaceState(
+            null,
+            document.title,
+            window.location.pathname + window.location.search,
+          );
           setReady(true);
           setMsg(null);
           return;
@@ -93,14 +111,24 @@ export default function UpdatePassword() {
     setErr(null);
     setMsg(null);
 
-    if (pass.length < 6) return setErr("A senha deve ter pelo menos 6 caracteres.");
-    if (pass !== confirm) return setErr("As senhas não coincidem.");
+    if (pass.length < 6) {
+      setErr("A senha deve ter pelo menos 6 caracteres.");
+      return;
+    }
+    if (pass !== confirm) {
+      setErr("As senhas não coincidem.");
+      return;
+    }
 
     setLoading(true);
     try {
       const { error } = await supabase.auth.updateUser({ password: pass });
       if (error) {
-        if(error.message?.toLocaleLowerCase().includes("different from the old")) {
+        if (
+          error.message
+            ?.toLocaleLowerCase()
+            .includes("different from the old")
+        ) {
           setErr("A nova senha deve ser diferente da senha anterior.");
         } else {
           setErr(error.message || "Não foi possível atualizar a senha.");
@@ -117,74 +145,78 @@ export default function UpdatePassword() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[var(--bg)] px-4">
-      <div className="w-full max-w-[420px]">
-        <div className="rounded-2xl bg-white shadow-[0_10px_30px_rgba(0,0,0,0.06)] border border-gray-100 p-6">
-          <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-4">
-            <span className="text-xl">🔒</span>
-          </div>
-          <h1 className="text-xl font-extrabold text-center text-gray-900">Definir nova senha</h1>
-          <p className="text-center text-gray-500 mt-1 mb-5">
-            Crie uma nova senha para acessar sua conta.
+    <div className="min-h-screen flex items-center justify-center px-6 py-8 bg-[#B5E945]">
+      <div className="w-full max-w-sm">
+        {/* HEADER */}
+        <header className="mb-6">
+          <h1 className="text-3xl font-bold text-[#1A1A1A] text-center">
+            Definir nova senha
+          </h1>
+          <p className="text-sm text-[#1A1A1A]/80 text-center mt-1">
+            Crie uma nova senha para continuar usando o FinEdu Kids.
           </p>
+        </header>
 
-          {!ready ? (
-            <div className="space-y-3">
-              {msg && <p className="text-center text-gray-600">{msg}</p>}
-              {err && (
-                <div className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-xl px-3 py-2">
-                  {err}
-                </div>
-              )}
-              <div className="flex justify-center">
-                <button
-                  onClick={tryEstablishSessionFromUrl}
-                  className="rounded-xl px-4 py-2 border bg-white hover:bg-gray-50"
-                >
-                  Tentar novamente
-                </button>
+        {/* ESTADO DE VALIDAÇÃO DO LINK */}
+        {!ready ? (
+          <div className="space-y-3">
+            {msg && (
+              <p className="text-center text-sm text-[#1A1A1A]/80">{msg}</p>
+            )}
+            {err && (
+              <div className="text-xs text-red-700 bg-red-50 border border-red-200 rounded-xl px-3 py-2">
+                {err}
               </div>
-            </div>
-          ) : (
-            <form onSubmit={onSubmit} className="space-y-3">
-              <input
-                type="password"
-                required
-                placeholder="Nova senha (mín. 6)"
-                value={pass}
-                onChange={(e) => setPass(e.target.value)}
-                className="w-full rounded-xl border border-gray-200 bg-white px-3 py-3 focus:outline-none focus:ring-2 focus:ring-blue-200"
-              />
-              <input
-                type="password"
-                required
-                placeholder="Confirmar nova senha"
-                value={confirm}
-                onChange={(e) => setConfirm(e.target.value)}
-                className="w-full rounded-xl border border-gray-200 bg-white px-3 py-3 focus:outline-none focus:ring-2 focus:ring-blue-200"
-              />
-
-              {err && (
-                <div className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-xl px-3 py-2">
-                  {err}
-                </div>
-              )}
-              {msg && (
-                <div className="text-sm text-green-700 bg-green-50 border border-green-200 rounded-xl px-3 py-2">
-                  {msg}
-                </div>
-              )}
-
+            )}
+            <div className="flex justify-center">
               <button
-                type="submit"
-                disabled={loading}
-                className="w-full rounded-xl px-4 py-3 font-semibold border transition bg-blue-600 text-white border-blue-600 hover:brightness-105 active:scale-[0.99] disabled:opacity-80"
+                type="button"
+                onClick={tryEstablishSessionFromUrl}
+                className="rounded-full px-4 py-2 text-xs font-semibold bg-white text-black shadow-sm border border-transparent hover:border-black/10"
               >
-                {loading ? "Salvando..." : "Atualizar senha"}
+                Tentar novamente
               </button>
-            </form>
-          )}
-        </div>
+            </div>
+          </div>
+        ) : (
+          <form onSubmit={onSubmit} className="space-y-3">
+            <input
+              type="password"
+              required
+              placeholder="Nova senha (mín. 6 caracteres)"
+              value={pass}
+              onChange={(e) => setPass(e.target.value)}
+              className="w-full bg-white rounded-full px-4 py-3 text-sm text-black shadow-sm outline-none border border-transparent focus:border-[#FF7A00]"
+            />
+            <input
+              type="password"
+              required
+              placeholder="Confirmar nova senha"
+              value={confirm}
+              onChange={(e) => setConfirm(e.target.value)}
+              className="w-full bg-white rounded-full px-4 py-3 text-sm text-[#1A1A1A] shadow-sm outline-none border border-transparent focus:border-[#FF7A00]"
+            />
+
+            {err && (
+              <div className="text-xs text-red-700 bg-red-50 border border-red-200 rounded-xl px-3 py-2">
+                {err}
+              </div>
+            )}
+            {msg && (
+              <div className="text-xs text-green-700 bg-green-50 border border-green-200 rounded-xl px-3 py-2">
+                {msg}
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full rounded-full bg-[#00ccff] text-[#1A1A1A] font-semibold py-3 text-sm shadow-md disabled:opacity-60 disabled:cursor-not-allowed active:scale-[0.98] transition-transform"
+            >
+              {loading ? "Salvando..." : "Atualizar senha"}
+            </button>
+          </form>
+        )}
       </div>
     </div>
   );

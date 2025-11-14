@@ -15,7 +15,7 @@
     />
 
     <!-- PWA Manifest -->
-    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="manifest" href="/manifest.json" />
 
     <!-- Theme color (status bar em mobile) -->
     <meta name="theme-color" content="#2563EB" />
@@ -59,7 +59,21 @@
 
   </head>
 
-  <body class="bg-parentBg text-gray-800">
+  <body>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/service-worker.js').then(
+            (registration) => {
+              console.log('ServiceWorker registrado com sucesso:', registration.scope);
+            },
+            (err) => {
+              console.log('Falha ao registrar o ServiceWorker:', err);
+            }
+          );
+        });
+      }
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

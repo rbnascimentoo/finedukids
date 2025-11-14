@@ -1,104 +1,125 @@
-// src/pages/auth/Reset.tsx
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
 import { supabase } from "../../services/supabase";
 
 export default function Reset() {
   const [email, setEmail] = useState("");
   const [msg, setMsg] = useState<string | null>(null);
   const [err, setErr] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
   const nav = useNavigate();
 
   useEffect(() => {
-    // tema neutro (pode usar 'parent' se quiser)
     document.body.setAttribute("data-role", "parent");
     return () => document.body.removeAttribute("data-role");
   }, []);
 
-  async function onSubmit(e: React.FormEvent) {
+  const resetMutation = useMutation({
+    mutationFn: async (emailValue: string) => {
+      const redirectTo = `${window.location.origin}/update-password`;
+
+      const { error } = await supabase.auth.resetPasswordForEmail(
+        emailValue.trim(),
+        { redirectTo },
+      );
+
+      if (error) {
+        throw new Error(
+          error.message || "Não foi possível iniciar a redefinição de senha.",
+        );
+      }
+    },
+    onSuccess: () => {
+      setErr(null);
+      setMsg(
+        "Se o e-mail estiver cadastrado, você receberá instruções para redefinir sua senha.",
+      );
+    },
+    onError: (e: unknown) => {
+      setMsg(null);
+      const message =
+        e instanceof Error
+          ? e.message
+          : "Erro inesperado ao solicitar redefinição.";
+      setErr(message);
+    },
+  });
+
+  const disabled = useMemo(
+    () => !email.trim() || resetMutation.isPending,
+    [email, resetMutation.isPending],
+  );
+
+  function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setMsg(null);
     setErr(null);
-    setLoading(true);
-    try {
-      // URL para onde o Supabase redirecionará após o usuário definir a nova senha.
-      // Altere para uma rota sua (ex.: /update-password) e implemente essa página se desejar.
-      const redirectTo = `${window.location.origin}/update-password`;
-
-      const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
-        redirectTo,
-      });
-
-      if (error) {
-        setErr(error.message || "Não foi possível iniciar a redefinição de senha.");
-        return;
-      }
-
-      setMsg("Caso o e-mail exista, você receberá um e-mail com instruções para redefinir sua senha.");
-    } catch (e: any) {
-      setErr(e?.message || "Erro inesperado ao solicitar redefinição.");
-    } finally {
-      setLoading(false);
-    }
+    if (disabled) return;
+    resetMutation.mutate(email);
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[var(--bg)] px-4">
-      <div className="w-full max-w-[420px]">
-        <div className="rounded-2xl bg-white shadow-[0_10px_30px_rgba(0,0,0,0.06)] border border-gray-100 p-6">
-          <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-4">
-            <span className="text-xl">🔑</span>
-          </div>
-          <h1 className="text-xl font-extrabold text-center text-gray-900">Esqueceu a senha?</h1>
-          <p className="text-center text-gray-500 mt-1 mb-5">
-            Sem problemas! Informe seu e-mail que vamos te ajudar a recuperar o acesso.
+    <div className="min-h-screen flex items-center justify-center px-6 py-8 bg-[#bbf144]">
+      <div className="w-full max-w-sm">
+        {/* HEADER */}
+        <header className="mb-8">
+          <h1 className="text-3xl font-bold text-[#403A3A] text-center">
+            Esqueceu a senha?
+          </h1>
+          <p className="text-sm text-[#403A3A]/80 text-center mt-1">
+            Sem problemas! Informe seu e-mail e te enviamos um link seguro.
           </p>
+        </header>
 
-          <form onSubmit={onSubmit} className="space-y-3">
-            <label className="block text-sm text-gray-700">E-mail</label>
-            <input
-              type="email"
-              required
-              placeholder="voce@exemplo.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-xl border border-gray-200 bg-white px-3 py-3 focus:outline-none focus:ring-2 focus:ring-blue-200"
-              autoComplete="email"
-            />
+        {/* FORM */}
+        <form onSubmit={onSubmit} className="space-y-3" noValidate>
+          <input
+            type="email"
+            required
+            placeholder="voce@exemplo.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full bg-white rounded-full px-4 py-3 text-sm text-black shadow-sm outline-none border border-transparent focus:border-[#FF7A00]"
+            autoComplete="email"
+          />
 
-            {err && (
-              <div className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-xl px-3 py-2">
-                {err}
-              </div>
-            )}
-            {msg && (
-              <div className="text-sm text-green-700 bg-green-50 border border-green-200 rounded-xl px-3 py-2">
-                {msg}
-              </div>
-            )}
+          {err && (
+            <div className="text-xs text-red-700 bg-red-50 border border-red-200 rounded-xl px-3 py-2">
+              {err}
+            </div>
+          )}
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full rounded-xl px-4 py-3 font-semibold border transition bg-blue-600 text-white border-blue-600 hover:brightness-105 active:scale-[0.99] disabled:opacity-80"
-            >
-              {loading ? "Enviando..." : "Redefinir senha"}
-            </button>
-          </form>
+          {msg && (
+            <div className="text-xs text-green-700 bg-green-50 border border-green-200 rounded-xl px-3 py-2">
+              {msg}
+            </div>
+          )}
 
-          <div className="mt-4">
-            <button onClick={() => nav(-1)} className="text-sm text-gray-600 hover:underline">
-              ← Voltar para Login
-            </button>
-          </div>
+          <button
+            type="submit"
+            disabled={disabled}
+            className="w-full rounded-full bg-[#ff7b00] text-[#1A1A1A] font-semibold py-3 text-sm shadow-md disabled:opacity-60 disabled:cursor-not-allowed active:scale-[0.98] transition-transform"
+          >
+            {resetMutation.isPending ? "Enviando..." : "Redefinir senha"}
+          </button>
+        </form>
 
-          <div className="mt-2 text-center text-sm">
-            <Link to="/register" className="text-blue-600 hover:underline">
-              Criar conta
-            </Link>
-          </div>
+        <div className="mt-4 text-center text-xs text-[#1A1A1A]">
+          <button
+            onClick={() => nav(-1)}
+            className="underline underline-offset-2"
+            type="button"
+          >
+            ← Voltar para login
+          </button>
         </div>
+
+        <p className="mt-2 text-center text-xs text-[#1A1A1A]">
+          Ainda não tem conta?{" "}
+          <Link to="/register" className="font-semibold underline">
+            Criar conta
+          </Link>
+        </p>
       </div>
     </div>
   );

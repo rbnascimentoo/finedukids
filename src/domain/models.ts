@@ -1,5 +1,18 @@
 export type Role = "parent" | "child";
 
+export type SignUpInput = {
+  // name: string;
+  email: string;
+  password: string;
+  // birthdate: Date | null;
+  // role: Role;
+};
+
+export type LoginPayload = {
+  email: string;
+  password: string;
+};
+
 export type User = {
   id: string;           // UUID
   name: string;
