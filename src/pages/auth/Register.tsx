@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import DatePicker, { registerLocale } from "react-datepicker";
+import { registerLocale } from "react-datepicker";
 import { ptBR } from "date-fns/locale";
 import "react-datepicker/dist/react-datepicker.css";
 import { useMutation } from "@tanstack/react-query";
@@ -19,15 +19,6 @@ export default function Register() {
   const [confirm, setConfirm] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [info, setInfo] = useState<string | null>(null);
-
-  useEffect(() => {
-    document.body.setAttribute(
-      "data-role",
-      role === "child" ? "child" : "parent",
-    );
-    return () => document.body.removeAttribute("data-role");
-  }, [role]);
-
 
   const signUpMutation = useMutation({
     mutationFn: async ({ email, password }: SignUpInput) => {

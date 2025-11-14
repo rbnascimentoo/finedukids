@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { supabase } from "../../services/supabase";
@@ -8,11 +8,6 @@ export default function Reset() {
   const [msg, setMsg] = useState<string | null>(null);
   const [err, setErr] = useState<string | null>(null);
   const nav = useNavigate();
-
-  useEffect(() => {
-    document.body.setAttribute("data-role", "parent");
-    return () => document.body.removeAttribute("data-role");
-  }, []);
 
   const resetMutation = useMutation({
     mutationFn: async (emailValue: string) => {
@@ -106,7 +101,7 @@ export default function Reset() {
 
         <div className="mt-4 text-center text-xs text-[#1A1A1A]">
           <button
-            onClick={() => nav(-1)}
+            onClick={() => nav("/login")}
             className="underline underline-offset-2"
             type="button"
           >

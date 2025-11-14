@@ -35,12 +35,6 @@ export default function ParentDashboard() {
   const [loading, setLoading] = useState(true);
   const [highlightId, setHighlightId] = useState<string | null>(null);
 
-  // tema do responsável
-  useEffect(() => {
-    document.body.setAttribute("data-role", "parent");
-    return () => document.body.removeAttribute("data-role");
-  }, []);
-
   // Carrega sessão e busca crianças
   useEffect(() => {
     let mounted = true;

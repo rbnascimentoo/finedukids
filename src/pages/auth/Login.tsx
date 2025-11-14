@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { supabase } from "../../services/supabase";
@@ -31,11 +31,6 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    document.body.setAttribute("data-role", "parent");
-    return () => document.body.removeAttribute("data-role");
-  }, []);
 
   const loginMutation = useMutation({
     mutationFn: async ({ email, password }: LoginPayload) => {

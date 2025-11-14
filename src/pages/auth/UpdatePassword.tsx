@@ -22,12 +22,6 @@ export default function UpdatePassword() {
   const [confirm, setConfirm] = useState("");
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    // segue o padrão das outras telas (tema "parent")
-    document.body.setAttribute("data-role", "parent");
-    return () => document.body.removeAttribute("data-role");
-  }, []);
-
   async function tryEstablishSessionFromUrl() {
     setMsg("Validando seu link…");
     setErr(null);
