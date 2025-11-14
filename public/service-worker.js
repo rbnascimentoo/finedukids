@@ -4,14 +4,14 @@ const RUNTIME_CACHE = `runtime-${SW_VERSION}`;
 
 const PRECACHE = [
   '/',
-  '/manifest.json',
-  '/icons/icon-192x192.png',
-  '/icons/icon-512x512.png',
+  '/public/manifest.json',
+  '/public/icons/icon-192x192.png',
+  '/public/icons/icon-512x512.png',
   // '/icons/maskable-192.png',
   // '/icons/maskable-512.png',
-  '/images/learn/learn-saving.svg',
-  '/images/learn/learn-earning.svg',
-  '/images/learn/learn-invest.svg',
+  '/public/images/learn/learn-saving.svg',
+  '/public/images/learn/learn-earning.svg',
+  '/public/images/learn/learn-invest.svg',
 ];
 
 self.addEventListener('install', (event) => {
