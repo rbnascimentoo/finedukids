@@ -102,15 +102,16 @@ export default function ParentDashboard() {
   );
 
   return (
-    <div className="min-h-screen bg-[var(--bg)] pb-24">
+    <div className="min-h-screen pb-24 bg-gradient-to-br from-[#FFD1D9] via-[#FFE9C3] via-[#C9FF5A] to-[#60E2FF]">
       {/* Header */}
-      <header className="bg-white border-b border-gray-100 shadow-sm sticky top-0">
+      <header className="sticky top-0 bg-white/80 backdrop-blur border-b border-white/40 shadow-sm">
         <div className="px-4 py-3 max-w-full md:max-w-[640px] mx-auto">
-          <h1 className="text-[17px] font-semibold text-gray-900">
+          <h1 className="text-[17px] font-semibold text-[#3D3A35]">
             Olá, {userName}
           </h1>
         </div>
       </header>
+
 
       {/* Conteúdo */}
       <main className="px-4 py-4 max-w-full md:max-w-[640px] mx-auto">
@@ -197,11 +198,10 @@ export default function ParentDashboard() {
 
                   <div className="text-right">
                     <p
-                      className={`font-extrabold tabular-nums transition-all duration-500 ${
-                        highlightId === k.id
+                      className={`font-extrabold tabular-nums transition-all duration-500 ${highlightId === k.id
                           ? "text-green-600 scale-110"
                           : "text-blue-700"
-                      }`}
+                        }`}
                     >
                       R$ {k.saldo.toFixed(2)}
                     </p>
@@ -231,6 +231,7 @@ export default function ParentDashboard() {
                             : x
                         )
                       );
+
                       setHighlightId(k.id);
                       setTimeout(() => setHighlightId(null), 900);
 

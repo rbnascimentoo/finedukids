@@ -19,8 +19,8 @@ function Item({ to, label, icon, end }: ItemProps) {
           "flex flex-col items-center justify-center h-14 rounded-xl transition select-none",
           "text-[11px] leading-tight",
           isActive
-            ? "text-blue-600 bg-blue-50 font-semibold"
-            : "text-gray-500 hover:text-gray-700 hover:bg-gray-50",
+            ? "text-[#1A1A1A] bg-white shadow-md font-semibold"
+            : "text-gray-600 hover:text-gray-800 hover:bg-white/70",
         ].join(" ")
       }
       aria-label={label}
@@ -31,19 +31,20 @@ function Item({ to, label, icon, end }: ItemProps) {
   );
 }
 
+
 export default function BottomNavParent() {
   return (
     <nav
       role="navigation"
       aria-label="Menu inferior do responsável"
       className="
-        fixed bottom-0 inset-x-0 z-40
-        bg-white/95 backdrop-blur
-        border-t border-gray-200
-        shadow-[0_-6px_20px_rgba(0,0,0,0.06)]
-        px-2 pt-2
-        pb-[calc(env(safe-area-inset-bottom)+8px)]
-      "
+    fixed bottom-0 inset-x-0 z-40
+    bg-white/90 backdrop-blur
+    border-t border-white/60
+    shadow-[0_-6px_20px_rgba(0,0,0,0.06)]
+    px-2 pt-2
+    pb-[calc(env(safe-area-inset-bottom)+8px)]
+  "
     >
       <div className="mx-auto max-w-full md:max-w-[640px] grid grid-cols-4 gap-2">
         <Item
