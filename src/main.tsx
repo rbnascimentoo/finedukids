@@ -3,7 +3,6 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import "./styles/index.css";
-import { registerSW } from "./registerSW";
 import { runWeeklyAutoAllowance } from "./services/autoAllowance";
 import { processQueue, installOnlineSync } from "./services/sync";
 import { supabase } from "./services/supabase";
@@ -32,8 +31,6 @@ function Bootstrapper() {
 
   return null; // só efeitos
 }
-
-registerSW();
 
 const queryClient = new QueryClient();
 
