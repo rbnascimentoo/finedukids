@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { autoCreditOnAppOpen } from "./services/autoAllowance";
 import { getCurrentUser } from "./services/auth";
 
@@ -25,6 +25,7 @@ import ParentProgress from "./pages/parent/Progress";
 import ParentSettings from "./pages/parent/Settings";
 
 import ProtectedRoute from "./router/ProtectedRoute";
+import Splash from "./pages/Splash";
 
 export default function App() {
   useEffect(() => {
@@ -51,6 +52,7 @@ export default function App() {
   return (
     <Routes>
       {/* Público */}
+      <Route path="/" element={<Splash />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/reset" element={<Reset />} />
@@ -141,8 +143,7 @@ export default function App() {
           </ProtectedRoute>
         }
       />
-
-      <Route path="/" element={<Navigate to="/login" replace />} />
+      
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
