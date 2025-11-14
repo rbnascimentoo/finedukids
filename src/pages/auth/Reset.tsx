@@ -54,7 +54,7 @@ export default function Reset() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-6 py-8 bg-[#bbf144]">
+    <div className="min-h-screen flex items-center justify-center px-6 py-8 bg-gradient-to-b from-[#FFD1D9] via-[#FFE9C3] to-[#60E2FF]">
       <div className="w-full max-w-sm">
         {/* HEADER */}
         <header className="mb-8">
