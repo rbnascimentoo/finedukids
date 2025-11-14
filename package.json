@@ -40,5 +40,8 @@
     "vite": "^7.1.2",
     "vite-plugin-pwa": "^1.0.3",
     "workbox-webpack-plugin": "^7.3.0"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "4.9.5"
   }
 }
